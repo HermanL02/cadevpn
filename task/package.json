@@ -15,15 +15,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@_koii/web3.js": "^0.1.11",
-    "@_koii/namespace-wrapper": "^1.0.1",
+    "@_koii/namespace-wrapper": "^1.0.10",
     "@_koii/storage-task-sdk": "^1.2.4",
+    "@_koii/web3.js": "^0.1.11",
+    "add": "^2.0.6",
     "axios": "^1.7.2",
     "cross-spawn": "^7.0.3",
     "dotenv": "^16.3.0",
     "dotenv-webpack": "^8.1.0",
     "nodemon": "^3.1.0",
-    "tail": "^2.2.6"
+    "sha256": "^0.2.0",
+    "tail": "^2.2.6",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "jest": "^29.5.0",

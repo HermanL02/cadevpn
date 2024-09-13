@@ -1,0 +1,9 @@
+   version: '3'
+   services:
+     test-server:
+       build: ./test-server
+       ports:
+         - "3001:3001"
+       environment:
+         - NODE_ENV=production
+       restart: always

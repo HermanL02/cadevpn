@@ -1,4 +1,5 @@
 const { namespaceWrapper } = require('@_koii/namespace-wrapper');
+const axios = require('axios');
 let server_url = 'http://ec2-34-207-236-225.compute-1.amazonaws.com/';
 
 class Audit {
@@ -11,31 +12,21 @@ class Audit {
    * @returns {Promise<boolean>} The validation result, return true if the submission is correct, false otherwise
    */
   async validateNode(submission_value, round, submitter_pubkey) {
-    let vote;
-    console.log('SUBMISSION VALUE', submission_value, round);
-    let query = server_url + 'downloads/' + encodeURIComponent(submission_value) ;
-    // console.log('query is ' + query)
-
+    let isValid = false; 
+    let query = server_url + 'downloads/' + encodeURIComponent(submission_value);
+  
     try {
-      axios.get(query)
-        .then(function (result) {
-            let pubkey = result.data;
-            if (result) {
-              // Hardcoded debug line
-              // TODO - remove following line when submitter pubkey is finished
-                if (!submitter_pubkey) submitter_pubkey = pubkey; // this line forces audit success
-                
-                let audit_result = (pubkey === submitter_pubkey);
-                if (audit_result) vote = audit_result;
-            } else {
-                console.log('no reply for downloads')
-            }
-        })
+      const result = await axios.get(query); 
+      let pubkey = result.data;
+      if (pubkey) {
+        isValid = (pubkey === submitter_pubkey);
+      } else {
+        console.log('no reply for downloads');
+      }
     } catch (e) {
       console.error(e);
-      vote = false;
     }
-    return vote;
+    return isValid;
   }
   /**
    * Audits the submission value by your logic

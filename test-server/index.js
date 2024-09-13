@@ -14,7 +14,8 @@ let downloads = {};
 app.get('/download/:pubkey', function (req, res) {
   let payload = generateRandomString(1); // 1MB
   let hash = sha256(payload, { asString: true });
-  downloads[hash] = req.params.pubkey;
+  let base64Hash = Buffer.from(hash).toString('base64'); 
+  downloads[base64Hash] = req.params.pubkey;
   console.log('downloads is now', downloads)
   res.send(payload);
 })

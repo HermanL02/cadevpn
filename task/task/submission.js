@@ -1,4 +1,6 @@
 const { namespaceWrapper } = require('@_koii/namespace-wrapper');
+const axios = require('axios');
+const sha256 = require('sha256'); 
 let server_url = 'http://ec2-34-207-236-225.compute-1.amazonaws.com/';
 
 class Submission {
@@ -9,24 +11,22 @@ class Submission {
    * @returns {void}
    */
   async task(round) {
-    let pubkey = namespaceWrapper.getMainAccountPubkey();
+    let pubkey = await namespaceWrapper.getMainAccountPubkey();
     let request_url = server_url + 'download/' + pubkey;
-    
-    console.log('about to make request to ', request_url)
+    console.log('request_url', request_url);
     try {
-      axios.get(request_url)
-      .then(async function (payload) {
-
-        let hash = sha256(payload.data.toString(), { asString: true })
-        
+        const response = await axios.get(request_url);
+        let hash = sha256(response.data.toString(), { asString: true });
+        let base64Hash = Buffer.from(hash).toString('base64'); 
         // NOTE: This hash is the 'submission' to K2
-        await namespaceWrapper.storeSet('value', hash);
-      })
-
+        console.log('hash', hash.length);
+        await namespaceWrapper.storeSet('value', base64Hash);
     } catch (err) {
-      console.log('error in pushOne for ' + pubkey)
+        console.log('error in pushOne for ' + pubkey + ': ' + err);
     }
-  }
+
+
+}
 
   /**
    * Submits a task for a given round
