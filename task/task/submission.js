@@ -11,7 +11,8 @@ class Submission {
    * @returns {void}
    */
   async task(round) {
-    let pubkey = await namespaceWrapper.getMainAccountPubkey();
+    let stakingKeypair = await namespaceWrapper.getSubmitterAccount();
+    let pubkey = stakingKeypair.publicKey.toString();
     let request_url = server_url + 'download/' + pubkey;
     console.log('request_url', request_url);
     try {
